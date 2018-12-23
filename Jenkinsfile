@@ -1,19 +1,24 @@
 pipeline {
 	agent any
+	tools {
+        maven 'maven-plugin'
+    }
 	stages {
-		stage('--clean--'){
+		stage('clone repo and clean it'){
 			steps {
-				sh "mvn clean"
+			    sh "rm -rf my-app"
+				sh "git clone https://github.com/nnelson16/my-app.git"
+				sh "mvn clean -f my-app"
 			}
 		}
-		stage('--test--'){
+		stage('Test'){
 			steps {
-				sh "mvn test"
+				sh "mvn test -f my-app"
 			}
 		}
-		stage('--package--'){
+		stage('Deploy'){
 			steps {
-				sh "mvn package"
+				sh "mvn package -f my-app"
 			}
 		}
 	}
